@@ -8,8 +8,10 @@ function getPages(con, allPages, toDo, depth, namespace) {
     let promise = con
       .promise()
       .query(
-        `SELECT DISTINCT page_title, page_namespace FROM page, categorylinks WHERE page_id=cl_from AND cl_to IN ("${categoriesString}")`
+        `SELECT DISTINCT page_title, page_namespace FROM page, categorylinks, linktarget WHERE
+        page_id=cl_from AND lt_id=cl_target_id AND lt_namespace=14 AND lt_title IN ("${categoriesString}")`
       );
+
     promise
       .then(([results, fields]) => {
         toDo = [];
